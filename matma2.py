@@ -1,10 +1,53 @@
+import sys
+
+try:
+    M = sys.argv[1]
+except:
+    M = 3
+
+try:
+    STAY = sys.argv[2]
+except:
+    STAY = 2
+
+try:
+    SOURCE = 1
+    SOURCE_CODE = sys.argv[3]
+    V_listf = open("V_list_filtered.txt", 'r')
+    for line in V_listf:
+        line.split(" ")
+        if line[0] == SOURCE_CODE:
+            SOURCE = line[1]
+            break
+    V_listf.close()
+except:
+    SOURCE = 1
+
+try:
+    YEAR = sys.argv[4]
+except:
+    YEAR = '2019'
+
+try:
+    MONTH = sys.argv[5]
+except:
+    MONTH = '01'
+
+try:
+    DAY = sys.argv[6]
+except:
+    DAY = "10"
+
+
 cities = open("output.txt", 'r')
 ofile = open("output_filted.dat", 'w')
 
 Efile = open("E_list_filtered.txt", 'w')
 V_list = []
 V_listf = open("V_list_filtered.txt", 'r')
+V_counter = 0
 for line in V_listf:
+    V_counter = V_counter + 1
     V_list.append(line[0:3])
 
 
@@ -19,9 +62,18 @@ for line in E_listf:
         E_list.append(line[0:6])
 print("Elist is filtered")
 
+E_counter = i-1
+
+from datetime import date, datetime, timedelta
+date_format = "%Y-%m-%d"
+day1 = datetime.strptime("{}-{}-{}".format(YEAR, MONTH, DAY), date_format)
+dates = []
+
+for i in range(14):
+    dates.append(str(day1+timedelta(days=i))[0:10])
 
 for line in cities:
-    if "2019-01-1" in line:
+    if [datee for datee in dates if datee in line]:
         if line[0:3] + line[5:8] in E_list:
             ofile.write(line)
 print("New output with filtered days is saved")
@@ -60,9 +112,7 @@ E_iter_list = {}
 time_list = []
 all_list = []
 
-from datetime import date, datetime
-date_format = "%Y-%m-%d"
-day1 = datetime.strptime("2019-01-10", date_format)
+
 
 
 for i,node in enumerate(V_list):
@@ -84,14 +134,14 @@ for i, node in enumerate(E_list):
 ofile.write("""/* Input data */
 data;
 
-param V_count := 200;
-param E_count := 3915;
-param DAY_count := 11;
-param M := 3;
-param STAY := 2;
-param S := 1;
+param V_count := {};
+param E_count := {};
+param DAY_count := 14;
+param M := {};
+param STAY := {};
+param S := {};
 
-param : A :=\n""")
+param : A :=\n""".format(V_counter, E_counter, M, STAY, SOURCE))
 
 
 for line in cities:
