@@ -15,9 +15,8 @@ try:
     SOURCE_CODE = sys.argv[3]
     V_listf = open("V_list_filtered.txt", 'r')
     for line in V_listf:
-        line.split(" ")
-        if line[0] == SOURCE_CODE:
-            SOURCE = line[1]
+        if line[0:3] == SOURCE_CODE:
+            SOURCE = line[4:]
             break
     V_listf.close()
 except:
