@@ -30,15 +30,16 @@ except:
 try:
     MONTH = sys.argv[5]
 except:
-    MONTH = '01'
+    MONTH = '2'
 
 try:
     DAY = sys.argv[6]
 except:
-    DAY = "10"
+    DAY = "1"
 
 
-cities = open("output.txt", 'r')
+#cities = open("dane_v2_utf8.csv", 'r')
+cities = open("dane_v2_utf8.csv", 'r')
 ofile = open("output_filted.dat", 'w')
 
 Efile = open("E_list_filtered.txt", 'w')
@@ -70,10 +71,11 @@ dates = []
 
 for i in range(14):
     dates.append(str(day1+timedelta(days=i))[0:10])
-
+print(str(dates))
 for line in cities:
-    if [datee for datee in dates if datee in line]:
-        if line[0:3] + line[5:8] in E_list:
+    dayInLine = datetime.strptime("{}-{}-{}".format(line.split(";")[2], line.split(";")[3], line.split(";")[4]), date_format)
+    if [datee for datee in dates if datee in str(dayInLine)]:
+        if line[1:4] + line[8:11] in E_list:
             ofile.write(line)
 print("New output with filtered days is saved")
 
@@ -146,12 +148,10 @@ param : A :=\n""".format(V_counter, E_counter, M, STAY, SOURCE))
 for line in cities:
     i=i+1
     list = line.split(";")
-    #print(str(list))
-    srcCity = list[0]
-    dstCity = list[1][-3:]
+    srcCity = list[0][1:-1]
+    dstCity = list[1][-4:-1]
     cost = list[3][1:-1]
-    timeVar = list[2]
-    timeVar = timeVar.split(" ")[1]
+    timeVar = str(datetime.strptime("{}-{}-{}".format(line.split(";")[2], line.split(";")[3], line.split(";")[4]), date_format))[0:10]
     date = datetime.strptime(timeVar, date_format)
     delta = date - day1
     delta = delta.days
@@ -174,12 +174,10 @@ all_list = []
 for line in cities:
     i = i + 1
     list = line.split(";")
-    # print(str(list))
-    srcCity = list[0]
-    dstCity = list[1][-3:]
+    srcCity = list[0][1:-1]
+    dstCity = list[1][-4:-1]
     cost = list[3][1:-1]
-    timeVar = list[2]
-    timeVar = timeVar.split(" ")[1]
+    timeVar = str(datetime.strptime("{}-{}-{}".format(line.split(";")[2], line.split(";")[3], line.split(";")[4]), date_format))[0:10]
     date = datetime.strptime(timeVar, date_format)
     delta = date - day1
     delta = delta.days
@@ -203,14 +201,13 @@ for line in cities:
     i=i+1
     list = line.split(";")
     #print(str(list))
-    srcCity = list[0]
-    dstCity = list[1][-3:]
-    timeVar = list[2]
-    timeVar = timeVar.split(" ")[1]
+    srcCity = list[0][1:-1]
+    dstCity = list[1][-4:-1]
+    timeVar = str(datetime.strptime("{}-{}-{}".format(line.split(";")[2], line.split(";")[3], line.split(";")[4]), date_format))[0:10]
     date = datetime.strptime(timeVar, date_format)
     delta = date - day1
     delta = delta.days
-    cost = list[3][1:-1]
+    cost = list[6]
 
     """flyline = srcCity + dstCity
     for item in E_list:
