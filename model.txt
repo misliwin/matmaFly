@@ -20,11 +20,11 @@ set E, default {1..E_count};
 set DAYS, default {1..DAY_count};
 set DAYSWITHOUTSTAY default {1..DAY_count-STAY};
 set DAYSWITHOUTMULTIPLESTAY default {1..DAY_count-STAY*(M-1)};
+set LASTDAYS default {DAY_count-STAY*(M-1)+1..DAY_count};
 
 /* Aev, Bev as params */
 param A{e in E, v in V, day in DAYS} binary, default 0;
 param B{e in E, v in V, day in DAYS} binary, default 0;
-
 
 /* Cost */
 param C{e in E, day in DAYS} >= 0, default 90000;
@@ -38,9 +38,11 @@ minimize z: sum{e in E, day in DAYS} x[e,day]*C[e,day];
 
 /* Constraints */
 
+
 s.t. c1 : sum{v in V,e in E, day in DAYS} A[e,v,day]*x[e,day] == M;
 s.t. c2 {v in V} : sum{ day in DAYS,e in E} (A[e,v,day]*x[e,day] - B[e,v,day]*x[e,day]) == 0;
 s.t. c3 {day in DAYSWITHOUTSTAY,v in V : v <> S} : sum{e in E} (A[e,v,day+STAY]*x[e,day+STAY] - B[e,v,day]*x[e,day]) == 0;
 s.t. c4 {day in DAYSWITHOUTMULTIPLESTAY,v in V : v == S} : sum{e in E} (A[e,v,day]*x[e,day] - B[e,v,day+STAY*(M-1)]*x[e,day+STAY*(M-1)]) == 0;
+s.t. c5 {e in E, day in LASTDAYS} : x[e,day] == 0;
 
 end;
