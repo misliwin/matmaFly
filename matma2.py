@@ -37,7 +37,7 @@ try:
 except:
     DAY = "1"
 
-
+howManyDays = 22
 #cities = open("dane_v2_utf8.csv", 'r')
 cities = open("dane_v2_utf8.csv", 'r')
 ofile = open("output_filted.dat", 'w')
@@ -69,7 +69,7 @@ date_format = "%Y-%m-%d"
 day1 = datetime.strptime("{}-{}-{}".format(YEAR, MONTH, DAY), date_format)
 dates = []
 
-for i in range(14):
+for i in range(howManyDays):
     dates.append(str(day1+timedelta(days=i))[0:10])
 print(str(dates))
 for line in cities:
@@ -137,12 +137,12 @@ data;
 
 param V_count := {};
 param E_count := {};
-param DAY_count := 14;
+param DAY_count := {};
 param M := {};
 param STAY := {};
 param S := {};
 
-param : A :=\n""".format(V_counter, E_counter, M, STAY, SOURCE))
+param : A :=\n""".format(V_counter, E_counter, str(howManyDays), M, STAY, SOURCE))
 
 
 for line in cities:
